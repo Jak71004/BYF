@@ -54,7 +54,9 @@
 
             </div>
         </nav>
-        
+           <!-- Address: {{btcAddress}}
+            Unconfirmed Balance: {{balance}}
+            Price: {{price}}-->
         <div ng-view></div>
         
 <!-- FOOTER -->
@@ -68,20 +70,5 @@
 </footer>
         
     </body>
-<script>
-document.getElementById("submit").onclick = function () {
-    
-    var keyPair = Bitcoin.ECPair.makeRandom();
 
-    $("#qrCode").attr("src", "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:"+keyPair.getAddress()+"?amount=0.00001&message=You're Going to fail" );
-    
-    // Print your private key (in WIF format)
-    //alert(keyPair.toWIF());
-    
-    // Print your public key address
-    //alert(keyPair.getAddress());
-    // => 14bZ7YWde4KdRb5YN7GYkToz3EHVCvRxkF
-    
-};
-</script>
 </html>

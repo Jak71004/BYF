@@ -24,14 +24,23 @@
     </head>
 
     <body>
-
         <div class="container">
             <div class="row">
-                <div class="col-md-4 center-block" style="float:none;">
-                    <p class>
+                <div class="col-md-6 center-block" style="float:none;">
+                    <p class="lead">
                         We want you to succeed, really, we do.  But let's be honest, it's more fun to antagonize you.  Who knows, maybe that's the motivation you need.
                     </p>
-                    <form>
+                    <p class="lead mock">I <input type="email" class="wager" id="inputEmail1" placeholder="{{wager.email}}" ng-model="wager.email"> bet <input type="number" class="wager" id="inputAmount" placeholder="{{ wager.amount | currency }}" ng-model="wager.amount" step="0.25" > that I can <select class="wager" ng-model="wager.proposition">
+                          <option>Loose Weight</option>
+                          <option>Quit Smoking</option>
+                          <option>Learn Something New</option>
+                          <option>Get Out of Debt</option>
+                          <option>Spend More Time with Family</option>
+                          <option>Travel</option>
+                          <option>Volunteer</option>
+                          <option>Other</option>
+                        </select></p>
+<!--                    <form>
                       <div class="form-group">
                         <label for="inputEmail1">Email address</label>
                         <input type="email" class="form-control" id="inputEmail1" placeholder="{{wager.email}}" ng-model="wager.email">
@@ -56,7 +65,8 @@
                              
                       <br />
                       <button id="submit" type="button" class="btn btn-default" ng-click="ChangeView('wager');">Submit</button>
-                    </form>
+                    </form>-->
+                    <button id="submit" type="button" class="btn btn-danger" ng-click="ChangeView('wager');">Continue</button>
                 </div>
             </div>
         </div>

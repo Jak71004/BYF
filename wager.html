@@ -28,51 +28,62 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 center-block" style="float:none;">
-                    <p>
-                        We want you to succeed, really, we do.  However, the odds are not in your favor.  Here is your chance to prove us wrong.
-                    </p>
-                    <form>
-                      <div class="form-group">
-                        <label for="inputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="inputEmail1" placeholder="{{wager.email}}" ng-model="wager.email">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputAmount">Amount <small>$0.10 minimum/$1000 maximum</small></label>
-                        <input type="number" class="form-control" id="inputAmount" placeholder="{{wager.amount | currency}}" ng-model="wager.amount">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputGoal">Goal</label>
-                        <select class="form-control" id="inputGoal" ng-model="wager.proposition">
-                          <option>Loose Weight</option>
-                          <option>Quit Smoking</option>
-                          <option>Learn Something New</option>
-                          <option>Get Out of Debt</option>
-                          <option>Spend More Time with Family</option>
-                          <option>Travel</option>
-                          <option>Volunteer</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputStartMetric">Start Metric</label>
-                        <input type="text" class="form-control" id="inputStartMetric" placeholder="" ng-model="wager.startMetric">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputGoalMetric">End Metric</label>
-                        <input type="text" class="form-control" id="inputGoalMetric" placeholder="" ng-model="endMetric">
-                      </div>
+                    <div class="page-header">
+                        <h2>
+                            Just tell us the details.
+                        </h2>
+                    </div>
+                    <form name="userForm" ng-controller="validateCtrl">
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }" >
+                          <label for="inputEmail1">Email address</label>
+                          <input type="email" class="form-control" name="email" id="inputEmail1" placeholder="{{wager.email}}" ng-model="wager.email" required>
+                          <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Something here isn't right.</p>
+                        </div>
                         
-                      <div class="form-group">
-                        <label for="inputDuration">Duration</label>
-                        <select class="form-control" id=inputDuration ng-model="wager.duration">
-                          <option>1 Week</option>
-                          <option>2 Weeks</option>
-                          <option>3 Weeks</option>
-                          <option>4 Weeks</option>
-                        </select>
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.amount.$invalid && !userForm.amount.$pristine }">
+                            <label for="inputAmount">Amount <small>$0.10 minimum/$1000 maximum</small></label>
+                            <input type="number" class="form-control" name="amount" id="inputAmount" placeholder="{{wager.amount | currency}}" ng-model="wager.amount" min="0.1" max="1000" required>
+                            <p ng-show="userForm.amount.$invalid && !userForm.amount.$pristine" class="help-block">Something here isn't right.</p>
+                            
+                        </div>
                         
-                      </div>
-                     
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"ng-click="UpdateBTC();">Make Your Wager</button>
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.goal.$invalid && !userForm.goal.$pristine }">
+                            <label for="inputGoal">Goal</label>
+                            <select class="form-control" name="goal" id="inputGoal" ng-model="wager.proposition" required>
+                                <option>Loose Weight</option>
+                                <option>Quit Smoking</option>
+                                <option>Learn Something New</option>
+                                <option>Get Out of Debt</option>
+                                <option>Spend More Time with Family</option>
+                                <option>Travel</option>
+                                <option>Volunteer</option>
+                            </select>
+                            <p ng-show="userForm.goal.$invalid && !userForm.goal.$pristine" class="help-block">Your Goal is Required</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="inputStartMetric">Start Metric</label>
+                            <input type="text" class="form-control" name="startMetric" id="inputStartMetric" placeholder="" ng-model="wager.startMetric">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="inputGoalMetric">End Metric</label>
+                            <input type="text" class="form-control" name="endMetric" id="inputGoalMetric" placeholder="" ng-model="wager.endMetric">
+                        </div>
+                        
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.duration.$invalid && !userForm.duration.$pristine }">
+                            <label for="inputDuration">Duration</label>
+                            <select class="form-control" name="duration" id=inputDuration ng-model="wager.duration" required>
+                                <option>1 Week</option>
+                                <option>2 Weeks</option>
+                                <option>3 Weeks</option>
+                                <option>4 Weeks</option>
+                            </select>
+                            <p ng-show="userForm.duration.$invalid && !userForm.duration.$pristine" class="help-block">The Wager Duration is Required</p>
+                        </div>
+                        
+                        <button type="button" class="btn btn-danger" ng-disabled="userForm.$invalid" data-toggle="modal" data-target="#myModal" ng-click="UpdateBTC();">Make Your Wager</button>
+                        
                     </form>
                 </div>
                 
@@ -87,27 +98,25 @@
                           <h4 class="modal-title">Confirm Your Wager</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <img id="qrCode" ng-src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:{{btcAddress}}?amount={{wager.amountBTC}}&message=You\'re Going to fail"></img>
-                                    </div>
-                                    <div class="col-sm-4">
-                                    <p>Putting your money where you mouth is, good for you.  Don't worry, that bad taste in your mouth will be washed away with all that crow you'll be eating.</p>    
-                                    <dl class="dl-horizontal">
-                                      <dt>Challenge:</dt>
-                                      <dd>{{wager.proposition}}</dd>
-                                      <dt>Duration:</dt>
-                                      <dd>{{wager.duration}}</dd>
-                                      <dt>Amount:</dt>
-                                      <dd>{{wager.amount | currency}}</dd>
-                                    </dl>
-                                </div>    
-                                </div>
+                            <div class="media">
+                              <div class="media-left">
+                                <img class="media-object" id="qrCode" ng-src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:{{btcAddress}}?amount={{wager.amountBTC}}&message=You\'re Going to fail"></img>
+                              </div>
+                              <div class="media-body">
+                              <h4 class="media-heading">Look Good?</h4>
+                                <p>Putting your money where you mouth is?  Good for you.  Don't worry, that bad taste in your mouth will be washed away by all the crow you'll have to eat.</p>    
+                                <dl class="dl-horizontal">
+                                  <dt>Challenge:</dt>
+                                  <dd>{{wager.proposition}}</dd>
+                                  <dt>Duration:</dt>
+                                  <dd>{{wager.duration}}</dd>
+                                  <dt>Amount:</dt>
+                                  <dd>{{wager.amount | currency}}</dd>
+                                </dl>
+                              </div>
+                            <small>Please scan the address now.  Remember, in the off chance you are successful, you need to claim your winnings by 11:59PM EST the day after the bet ends or it is a failure.</small>
                             </div>
-                          <div>
                             
-                        </div>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

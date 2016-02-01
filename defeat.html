@@ -6,7 +6,7 @@
         <title>Bet You FAIL</title>
 
         <!--jQuery from a CDN-->
-        <script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,65 +27,75 @@
                     <div class="page-header">
                       <h1>Time To Fess Up.</h1>
                     </div>
-                    <form>
-                      <div class="form-group">
-                        <label for="inputPublicAddress">Public Address</label>
-                        <input type="text" class="form-control" id="inputPublicAddress" placeholder="" ng-model="wager.publicAddress">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputPin">Pin</label>
-                        <input type="number" class="form-control" id="inputPin" placeholder="">
-                      </div>
-                      
-                     <!-- Indicates a successful or positive action -->
-                    <button type="button" class="btn btn-success">Success</button>
-                    
-                    <!-- Indicates a dangerous or potentially negative action -->
-                    <button type="button" class="btn btn-danger">Failure</button>
+                    email: {{email}}
+                    <form name="userForm" ng-controller="validateCtrl">
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }" >
+                          <label for="inputEmail1">Email address</label>
+                          <input type="email" class="form-control" name="email" id="inputEmail1" placeholder="{{wager.email}}" ng-model="wager.email" required>
+                          <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Something here isn't right.</p>
+                        </div>
+                        
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.inputPublicAddress.$invalid && !userForm.inputPublicAddress.$pristine }">
+                            <label for="inputPublicAddress">Public Address</label>
+                            <input type="text" class="form-control" name="inputPublicAddress" id="inputPublicAddress" placeholder="" >
+                            <p ng-show="userForm.inputPublicAddress.$invalid && !userForm.inputPublicAddress.$pristine" class="help-block">The Public Address is Required</p>
+                        </div>
+                        
+                        <button type="button" class="btn btn-danger" ng-disabled="userForm.$invalid" data-toggle="modal" data-target="#defeatModal" ng-click="GetWager();">Get Your Wager</button>
+                        
+                        <!-- Indicates a successful or positive action -->
+<!--                        <button type="button" class="btn btn-success">Success</button>-->
+
+                        <!-- Indicates a dangerous or potentially negative action -->
+<!--                        <button type="button" class="btn btn-danger">Failure</button>-->
+                        
+                        
+                        
                     </form>
+                   
                 </div>
                 
                 <!-- Modal -->
-                  <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal fade" id="defeatModal" role="dialog">
                     <div class="modal-dialog">
 
                       <!-- Modal content-->
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <h4 class="modal-title">Confirm Your Wager</h4>
+                          <h4 class="modal-title">Here's Your Wager</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <img id="qrCode" src=""></img>
-                                    </div>
-                                    <div class="col-sm-4">
-                                    <p>Putting your money where you mouth is, good for you.  Don't worry, that bad taste in your mouth will be washed away with all that crow you'll be eating.</p>    
-                                    <dl class="dl-horizontal">
-                                      <dt>Challenge:</dt>
-                                      <dd>{{wager.proposition}}</dd>
-                                      <dt>Duration:</dt>
-                                      <dd>{{wager.duration}}</dd>
-                                      <dt>Amount:</dt>
-                                      <dd>{{wager.amount | currency}}</dd>
-                                    </dl>
-                                </div>    
-                                </div>
+                            <div class="media">
+                              <div class="media-left">
+                                <img class="media-object" id="qrCode" ng-src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:{{btcAddress}}?amount={{wager.amountBTC}}&message=You\'re Going to fail"></img>
+                              </div>
+                              <div class="media-body">
+                              <h4 class="media-heading">Did You Fail?</h4>
+                                <p>Putting your money where you mouth is?  Good for you.  Don't worry, that bad taste in your mouth will be washed away by all the crow you'll have to eat.</p>    
+                                <dl class="dl-horizontal">
+                                  <dt>Challenge:</dt>
+                                  <dd>{{wager.proposition}}</dd>
+                                  <dt>Duration:</dt>
+                                  <dd>{{wager.duration}}</dd>
+                                  <dt>Amount:</dt>
+                                  <dd>{{wager.amount | currency}}</dd>
+                                </dl>
+                              </div>
+                            <small>Please scan the address now.  Remember, in the off chance you are successful, you need to claim your winnings by 11:59PM EST the day after the bet ends or it is a failure.</small>
                             </div>
-                          <div>
                             
                         </div>
-                        </div>
                         <div class="modal-footer">
-                          <button type="button" id="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                       </div>
 
                     </div>
                   </div>
+                
+                <br />
+                <br />
             </div>
             
         </div>

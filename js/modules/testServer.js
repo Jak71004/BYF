@@ -117,83 +117,36 @@ var SampleApp = function() {
             res.send(self.cache_get('index.html') );
         };
 
-    };
-
-    /**
-     *  Setting up the router.
-     */
-    self.configureRouter = function(){
-                
-        // middleware to use for all requests
-        router.use(function(req, res, next) {
-            // do logging
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-            res.header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
-
-            console.log('Something is happening.');
-            next(); // make sure we go to the next routes and don't stop here
-        });
-        
-        // more routes for our API will happen here
-        router.route('/wagers')
-
-            // create a wager (accessed at POST http://localhost:8080/api/wagers)
-            .post(function(req, res) {
-
-                //var bear = new Bear();      // create a new instance of the Bear model
-                //bear.name = req.body.name;  // set the bears name (comes from the request)
-
-                // save the bear and check for errors
-                //bear.save(function(err) {
-                    //if (err)
-                        //res.send(err);
-
-                    res.json({ message: 'wager created! ' + req });
-                //});
-
-            })
-
-            // get all the bears (accessed at GET http://localhost:8080/api/wagers)
-            .get(function(req, res) {
+        //.get all wagers
+        self.routes['allWagers'] = function(req, res) {
             //        Bear.find(function(err, bears) {
             //            if (err)
             //                res.send(err);
             //
                         res.json(wagers);
-            //        });
-                });
-            // on routes that end in /bears/:bear_id
-        // ----------------------------------------------------
-        router.route('/wagers/:email')
-
-            // get the bear with that id (accessed at GET http://localhost:8080/api/wagers/:email)
-            .get(function(req, res) {
+            //        });            
+        };
+        
+        //.get a wager
+        self.routes['aWager'] = function(req, res) {
         //        Bear.findById(req.params.bear_id, function(err, bear) {
         //            if (err)
         //                res.send(err);
         //            res.json(bear);
         //        });
-                 console.log(req.params.email);
-                var wagerEmail = req.params.email; //parseInt(req.params.id);
-                var data = {};
-                for (var i=0, len=wagers.length;i<len; i++){
-                    if(wagers[i].email ===wagerEmail){
-                        data=wagers[i];
-                        break;
-                    }
+            var wagerEmail = req.params.email; //parseInt(req.params.id);
+            var data = {};
+            for (var i=0, len=wagers.length;i<len; i++){
+                if(wagers[i].email ===wagerEmail){
+                    data=wagers[i];
+                    break;
                 }
-                console.log(data);
-                res.json(data);
-            })
-
-            // update the bear with this id (accessed at PUT http://localhost:8080/api/bears/:bear_id)
-            .put(function(req, res) {
-
-            })
-
-            // delete the bear with this id (accessed at DELETE http://localhost:8080/api/bears/:bear_id)
-            .delete(function(req, res) {
+            }
+            res.json(data);
+        };
+        
+        //.delete A Wager
+        self.routes['deleteWager'] = function(req, res) {
             //        Bear.remove({
             //            _id: req.params.bear_id
             //        }, function(err, bear) {
@@ -202,8 +155,44 @@ var SampleApp = function() {
             //
             //            res.json({ message: 'Successfully deleted' });
             //        });
-            });
+        };
         
+        //.post A Wager
+        self.routes['createWager'] = function(req, res) {
+            //var bear = new Bear();      // create a new instance of the Bear model
+            //bear.name = req.body.name;  // set the bears name (comes from the request)
+            
+            // save the bear and check for errors
+            //bear.save(function(err) {
+            //if (err)
+            //res.send(err);
+            
+            res.json({ message: 'wager created! ' + req });
+            //});
+            
+        };
+    };
+
+    /**
+     *  Setting up the router.
+     */
+    self.configureRouter = function(){
+           
+        self.app.get('/wagers', self.routes['allWagers']);
+        self.app.get('/wagers/wager/:email', self.routes['aWager']);
+        self.app.delete('/wagers/wager/:email', self.routes['deleteWager']);
+        self.app.post('/wagers/wager', self.routes['createWager']);
+        
+        // middleware to use for all requests
+        /*router.use(function(req, res, next) {
+            // do logging
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+            res.header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
+
+            console.log('Something is happening.');
+            next(); // make sure we go to the next routes and don't stop here
+        });*/
     };
 
     /**
@@ -219,10 +208,8 @@ var SampleApp = function() {
             self.app.get(r, self.routes[r]);
         }
         
-        self.configureRouter();
-        
-        // all of our routes will be prefixed with /api
-        self.app.use('/api', router);
+        //Set up the router
+        Self.configureRouter();
     };
 
 

@@ -209,7 +209,7 @@ var SampleApp = function() {
         }
         
         //Set up the router
-        Self.configureRouter();
+        self.configureRouter();
     };
 
 

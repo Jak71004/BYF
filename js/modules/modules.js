@@ -175,10 +175,12 @@
         $scope.ChangeView = function(view){$location.path(view);};
         $scope.wager = myWagerFactory;
         
+        //Called from Wager page at opening of modal.
         $scope.UpdateBTC = function(){
             btcFactory.getLastPrice().then(function(){
                 $scope.price = btcFactory.price;
                 myWagerFactory.amountBTC = myWagerFactory.amount/btcFactory.price;
+                myWagerFactory.saveWager;
             })
             btcFactory.createAddress();
             //btcFactory.createCustomAddress();

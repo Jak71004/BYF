@@ -2,6 +2,8 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
+var mongoos = require('mongoosDB');
+require('./models/Posts');
 var wagers = [
     {
         id: 1,

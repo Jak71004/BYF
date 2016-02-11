@@ -27,7 +27,7 @@
         wgrFactory.prototype.saveWager = function(){
             var self = this;
             
-            return $http.post('http://localhost:8080/api/bears', self)
+            return $http.post('http://betyoufailapi-betyoufail.rhcloud.com/wagers/wager'+self.email+self.amount+self.amountBTC+self.proposition+self.duration+self.startMetric+self.endMetric+self.publicAddress, self)
                 .then(function(response){
                     return response.data;
             });
@@ -36,7 +36,7 @@
         wgrFactory.prototype.getWagers = function(){
             var self = this;
             
-            return $http.get('http://localhost:8080/api/bears')
+            return $http.get('http://betyoufailapi-betyoufail.rhcloud.com/wagers')
                 .then(function(response){
                     return response.data;
                 });
@@ -45,7 +45,7 @@
         wgrFactory.prototype.getWager = function(email){
             var self = this;
             
-            return $http.get('http://localhost:8080/api/bears/'+email)
+            return $http.get('betyoufailapi-betyoufail.rhcloud.com/wagers/wager'+email)
                 .then(function(response){
                     self.email = response.data.email;
                     self.amount = response.data.amount;
@@ -164,7 +164,7 @@
              
         var btcFactory = new bitcoinFactory();
         var myWagerFactory = new wgrFactory();
-        
+        myWagerFactory.getWagers().then(function(res){$scope.allWagers =res});
         btcFactory.getBalance(btcFactory.address).then(function(){$scope.balance = btcFactory.balance;});
         //myWagerFactory.saveWager().then(function(res){$scope.email = res.message;})  
         
@@ -227,8 +227,8 @@
     //  Defeat Controller                                //
     ///////////////////////////////////////////////////////
     var defeatController = function($scope, $http, wgrFactory){
-        var myWagerFactory = new wgrFactory();
-        $scope.wager = myWagerFactory;
+        var myWagerFactory = $scope.wager;
+        //$scope.wager = myWagerFactory;
         $scope.GetWager = function(){
             myWagerFactory.getWager(myWagerFactory.email).then(function(res){
                 $scope.email = myWagerFactory.email +" " + " " +res.email;

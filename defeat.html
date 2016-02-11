@@ -13,6 +13,10 @@
 
         <!--Bootstrap CSS from a CDN-->
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
+        <!--BootstrapJS from a CDN-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        
+        
         <link rel="stylesheet" href="css/style.css">
         
         <!--BitcoinJS-->
@@ -27,7 +31,6 @@
                     <div class="page-header">
                       <h1>Time To Fess Up.</h1>
                     </div>
-                    email: {{email}}
                     <form name="userForm" ng-controller="validateCtrl">
                         <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }" >
                           <label for="inputEmail1">Email address</label>
@@ -67,12 +70,14 @@
                         </div>
                         <div class="modal-body">
                             <div class="media">
+<!--
                               <div class="media-left">
-                                <img class="media-object" id="qrCode" ng-src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:{{btcAddress}}?amount={{wager.amountBTC}}&message=You\'re Going to fail"></img>
+                                <img class="media-object" id="qrCode" ng-src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:{{wager.publicAddress}}?amount={{wager.amountBTC}}&message=You\'re Going to fail"></img>
                               </div>
+-->
                               <div class="media-body">
                               <h4 class="media-heading">Did You Fail?</h4>
-                                <p>Putting your money where you mouth is?  Good for you.  Don't worry, that bad taste in your mouth will be washed away by all the crow you'll have to eat.</p>    
+                                <p>Here's what you said you could do.</p>    
                                 <dl class="dl-horizontal">
                                   <dt>Challenge:</dt>
                                   <dd>{{wager.proposition}}</dd>
@@ -82,12 +87,13 @@
                                   <dd>{{wager.amount | currency}}</dd>
                                 </dl>
                               </div>
-                            <small>Please scan the address now.  Remember, in the off chance you are successful, you need to claim your winnings by 11:59PM EST the day after the bet ends or it is a failure.</small>
                             </div>
                             
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" ng-click="ChangeView('success');">"Success"</button>
+                            <button type="button" class="btn btn-danger" ng-click="ChangeView('failure');">Failure</button>
+<!--                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                         </div>
                       </div>
 
@@ -96,6 +102,7 @@
                 
                 <br />
                 <br />
+            <p>&nbsp;</p>
             </div>
             
         </div>

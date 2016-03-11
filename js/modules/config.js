@@ -4,23 +4,31 @@
         $routeProvider.
             when('/home', {
                 templateUrl: 'home.html',
-                controller: 'mainCtrl'
+                //controller: 'mainCtrl'
             }).
             when('/wager', {
                 templateUrl: 'wager.html',
-                controller: 'wagerCtrl'
+                //controller: 'mainCtrl'
             }).            
             when('/defeat', {
                 templateUrl: 'defeat.html',
-                controller: 'defeatCtrl'
+                //controller: 'defeatCtrl'
             }).
             when('/faq', {
                 templateUrl: 'faq.html',
-                controller: 'faqCtrl'
+                //controller: 'faqCtrl'
             }).
             when('/contactus', {
                 templateUrl: 'contactus.html',
-                controller: 'contactCtrl'
+                //controller: 'contactCtrl'
+            }).
+            when('/failure', {
+                templateUrl: 'failure.html',
+                //controller: 'mainCtrl'
+            }).
+            when('/success', {
+                templateUrl: 'success.html',
+                //controller: 'mainCtrl'
             }).
             otherwise({redirectTo:'/home'});
         });

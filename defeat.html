@@ -40,7 +40,7 @@
                         
                         <div class="form-group" ng-class="{ 'has-error' : userForm.inputPublicAddress.$invalid && !userForm.inputPublicAddress.$pristine }">
                             <label for="inputPublicAddress">Public Address</label>
-                            <input type="text" class="form-control" name="inputPublicAddress" id="inputPublicAddress" placeholder="" >
+                            <input type="text" class="form-control" name="inputPublicAddress" id="inputPublicAddress" placeholder="{{wager.publicAddress}}" >
                             <p ng-show="userForm.inputPublicAddress.$invalid && !userForm.inputPublicAddress.$pristine" class="help-block">The Public Address is Required</p>
                         </div>
                         

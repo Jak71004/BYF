@@ -14,6 +14,7 @@
                        
         var wgrFactory = function(){
             this.email = 'Eat@Joes.com';
+            this.challenge = 'Stuff';
             this.amount = '2';
             this.amountBTC = '0';
             this.proposition = 'Loose Weight';
@@ -26,8 +27,7 @@
         
         wgrFactory.prototype.saveWager = function(){
             var self = this;
-            
-            return $http.post('http://betyoufailapi-betyoufail.rhcloud.com/wagers/wager'+self.email+self.amount+self.amountBTC+self.proposition+self.duration+self.startMetric+self.endMetric+self.publicAddress, self)
+            return $http.post('http://127.0.0.1:3000/api/wagers/wager', self )
                 .then(function(response){
                     return response.data;
             });
@@ -36,18 +36,28 @@
         wgrFactory.prototype.getWagers = function(){
             var self = this;
             
-            return $http.get('http://betyoufailapi-betyoufail.rhcloud.com/wagers')
+            return $http.get('http://127.0.0.1:3000/api/wagers')
                 .then(function(response){
                     return response.data;
                 });
         };
         
-        wgrFactory.prototype.getWager = function(email){
+        wgrFactory.prototype.getWager = function(email, publicAddress){
             var self = this;
             
-            return $http.get('betyoufailapi-betyoufail.rhcloud.com/wagers/wager'+email)
+            var parameters = {
+                email: email,
+                publicAddress: publicAddress
+            };
+            
+            var config = {
+                params: parameters
+            };
+            
+            return $http.get('http://127.0.0.1:3000/api/wagers/wager', config)
                 .then(function(response){
                     self.email = response.data.email;
+                    self.challenge=response.data.challenge;
                     self.amount = response.data.amount;
                     self.amountBTC = response.data.amountBTC;
                     self.proposition = response.data.proposition;
@@ -63,28 +73,6 @@
         return wgrFactory;
     };
     module.factory('wgrFactory', ['$http', wgrFactoryVar])
-    
-    ///////////////////////////////////////////////
-    //
-    // Wage Factor Function: Is the wager object
-    //
-    ///////////////////////////////////////////////
-    var wagerFactoryVar = function($http){
-        var wager = {
-            email:'Eat@Joes.com',
-            amount:'2',
-            amountBTC:'0',
-            proposition:'Loose Weight',
-            duration:'1 Week',
-            startMetric:'',
-            endMetric:''
-        };
-
-        return wager;
-        
-    };
-   
-    module.factory('wagerFactory', ['$http',wagerFactoryVar]);
     
     ///////////////////////////////////////////////
     //
@@ -160,7 +148,7 @@
     // Main Controller
     //
     /////////////////////////////////////////////////    
-    var mainController = function($scope, $http, $location, wagerFactory, bitcoinFactory, wgrFactory){
+    var mainController = function($scope, $http, $location, bitcoinFactory, wgrFactory){
              
         var btcFactory = new bitcoinFactory();
         var myWagerFactory = new wgrFactory();
@@ -180,16 +168,18 @@
             btcFactory.getLastPrice().then(function(){
                 $scope.price = btcFactory.price;
                 myWagerFactory.amountBTC = myWagerFactory.amount/btcFactory.price;
-                myWagerFactory.saveWager;
+                //myWagerFactory.saveWager();
             })
             btcFactory.createAddress();
             //btcFactory.createCustomAddress();
             $scope.btcAddress=btcFactory.address;
+            myWagerFactory.publicAddress = btcFactory.address;
+            myWagerFactory.saveWager();
         };
         
     };
     
-    mainController.$inject = ['$scope', '$http', '$location', 'wagerFactory', 'bitcoinFactory', 'wgrFactory'];
+    mainController.$inject = ['$scope', '$http', '$location', 'bitcoinFactory', 'wgrFactory'];
     module.controller('mainCtrl', mainController)
 
     ///////////////////////////////////////////////////////
@@ -217,8 +207,8 @@
     //                                                   //       
     //  Wager Controller                                 //
     ///////////////////////////////////////////////////////
-    var wagerController = function($scope, wagerFactory){};
-    wagerController.$inject = ['$scope', 'wagerFactory'];
+    var wagerController = function($scope){};
+    wagerController.$inject = ['$scope'];
     module.controller('wagerCtrl', wagerController)
     
     
@@ -226,16 +216,17 @@
     //                                                   //       
     //  Defeat Controller                                //
     ///////////////////////////////////////////////////////
-    var defeatController = function($scope, $http, wgrFactory){
+    var defeatController = function($scope, $http){
         var myWagerFactory = $scope.wager;
         //$scope.wager = myWagerFactory;
         $scope.GetWager = function(){
             myWagerFactory.getWager(myWagerFactory.email).then(function(res){
+                $scope.wager = myWagerFactory;
                 $scope.email = myWagerFactory.email +" " + " " +res.email;
             })    
         };
     };
-    defeatController.$inject = ['$scope', '$http', 'wgrFactory'];
+    defeatController.$inject = ['$scope', '$http'];
     module.controller('defeatCtrl',defeatController)
     
 })();

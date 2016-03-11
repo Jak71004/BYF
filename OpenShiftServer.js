@@ -4,6 +4,7 @@ var express = require('express');
 var fs      = require('fs');
 var path    = require('path');
 var mongojs = require('mongojs');
+var bodyParser = require('body-Parser');
 
 var connectionString; 
 var db; 
@@ -140,8 +141,51 @@ var SampleApp = function() {
     self.initializeServer = function() {
         self.createRoutes();
         self.app = express();
+        self.app.use(bodyParser.json());
+        self.app.use(bodyParser.urlencoded({ extended: true }));
         self.app.use(express.static(path.join(__dirname, 'public')));
+        self.app.use(function (req, res, next) {
 
+            console.log(req.body);
+            
+            // Website you wish to allow to connect
+            res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+            //res.setHeader('Access-Control-Allow-Origin', 'http://BetYou.Fail'); //Allow BYF to connect
+
+            // Request methods you wish to allow
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+            // Request headers you wish to allow
+            res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+            // Set to true if you need the website to include cookies in the requests sent
+            // to the API (e.g. in case you use sessions)
+            res.setHeader('Access-Control-Allow-Credentials', true);
+
+            // Pass to next layer of middleware
+            next();
+        });
+        
+        
+        self.app
+            .post('/api/wagers/wager', function(req,res){
+                //res.send('Got a POST request');
+        })
+            .get('/api/wagers', function(req, res){
+                console.log('You rang?');
+                res.send({email:'jon'}); 
+        })
+            .get('/api/wagers/wager', function(req, res){
+                console.log('You rang?' + req.body);
+                res.send({
+                    email:'jon@me.com',
+                    challenge: 'stuff',
+                    duration: '1 week',
+                    amount: 5,
+                    publicAddress:'156546548678979546513216857'
+                }); 
+        });
+        
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);

@@ -6,6 +6,8 @@ var path    = require('path');
 var mongojs = require('mongojs');
 var bodyParser = require('body-Parser');
 
+var bitcoinCtrl = require('./js/bitcoin');
+
 var connectionString; 
 var db; 
 
@@ -169,6 +171,12 @@ var SampleApp = function() {
         
         self.app
             .post('/api/wagers/wager', function(req,res){
+                var keyPair = bitcoinCtrl.CreateKeyPair(req);
+                //store public address to db
+                var address = keyPair.getAddress();
+                //Don't need this but 
+                //keyPair.toWIF(); is the private key
+                
                 //res.send('Got a POST request');
         })
             .get('/api/wagers', function(req, res){
